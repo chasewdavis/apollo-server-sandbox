@@ -12,4 +12,4 @@
 
 ## Documentation
 
-Check out the [official docs for a plethora of Apollo Server features](https://www.apollographql.com/docs/apollo-server/v2/)
+Check out the [official docs for a plethora of Apollo Server features](https://www.apollographql.com/docs/apollo-server/v2/).
