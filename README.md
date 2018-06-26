@@ -1,4 +1,4 @@
-#A GraphQL server example
+# A GraphQL server example
 
 >  #### A simple, straight forward guide to building a GraphQL server with Apollo Server.
 
