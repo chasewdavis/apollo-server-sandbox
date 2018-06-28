@@ -1,6 +1,16 @@
 # A GraphQL server example
 
->  #### A simple, straight forward guide to building a GraphQL server with Apollo Server.
+>  **A simple, straight forward guide to building a GraphQL server with Apollo Server.**
+
+## About this repository
+
+This repository is the example application for the [_Getting Stared_ guide](https://www.apollographql.com/docs/apollo-server/v2/getting-started.html) in the Apollo Server documentation.
+
+## Online sandbox
+
+Play with this example using [Glitch](https://glitch.com/) by clicking the following button:
+
+[![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/apollographql/graphql-server-example)
 
 ## Installation
 
