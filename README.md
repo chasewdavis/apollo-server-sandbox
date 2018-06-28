@@ -4,7 +4,7 @@
 
 ## About this repository
 
-This repository is the example application for the [_Getting Stared_ guide](https://www.apollographql.com/docs/apollo-server/v2/getting-started.html) in the Apollo Server documentation.
+This repository is the example application for the [_Getting Started_ guide](https://www.apollographql.com/docs/apollo-server/v2/getting-started.html) in the Apollo Server documentation.
 
 ## Online sandbox
 
