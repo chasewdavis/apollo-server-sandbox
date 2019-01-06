@@ -1,0 +1,43 @@
+type Book {
+    title: String
+    author: String
+}
+
+input PlayerInput {
+    userName: String!
+    id: ID
+}
+
+type Player {
+    id: ID!
+    userName: String!
+}
+
+input GameRoomInput {
+    name: String!
+    players: [PlayerInput]
+}
+
+type GameRoom {
+    id: ID!
+    name: String!
+    players: [Player]
+}
+
+type Query {
+    books (limit:Int): [Book]
+    gameRooms: [GameRoom]
+    players: [Player]
+}
+
+type Mutation {
+    addBook(title: String!, author: String!): Book 
+    createPlayer(userName: String!): Player
+    joinGameRoom(gameRoomId: String!, player: PlayerInput!): GameRoom
+    createGameRoom(gameRoomName: String!, player: PlayerInput!): GameRoom
+}
+
+type Subscription {
+    bookAdded: Book
+    playerJoined: Player
+}
