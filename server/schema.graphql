@@ -33,8 +33,8 @@ type Query {
 type Mutation {
     addBook(title: String!, author: String!): Book 
     createPlayer(userName: String!): Player
-    joinGameRoom(gameRoomId: String!, player: PlayerInput!): GameRoom
-    leaveGameRoom(gameRoomId: ID!, player: PlayerInput!): GameRoom
+    joinGameRoom(gameRoomId: String!, playerId: ID!): GameRoom
+    leaveGameRoom(gameRoomId: ID!, playerId: ID!): GameRoom
     createGameRoom(gameRoomName: String!, player: PlayerInput!): GameRoom
 }
 

@@ -7,31 +7,24 @@ const BOOK_ADDED = 'BOOK_ADDED';
 const PLAYER_JOINED = 'PLAYER_JOINED';
 const PLAYER_LEFT = 'PLAYER_LEFT';
 
-const books = [
-    {
-        title: 'Harry Potter and the Chamber of Secrets',
-        author: 'J.K. Rowling'
-    },
-    {
-        title: 'Jurassic Park',
-        author: 'Michael Crichton'
-    }
-];
-
 const gameRooms = [
     {
         name: 'game room one',
-        id: faker.random.uuid(),
+        id: '807ab1aa-3aaa-42bc-aead-ed7f16ccdbd1',
         players: []
     }
 ];
 
 
-const players = [];
+const players = [
+    {
+        id: '770de62d-1f9b-4e1c-be4e-ba5e566e5837',
+        userName: 'chase'
+    }
+];
 
 const resolvers = {
     Query: {
-        books: (_, { limit }) => (limit || limit === 0 ? books.slice(0, limit) : books),
         gameRooms: () => gameRooms,
         players: () => players
     },
@@ -39,7 +32,6 @@ const resolvers = {
     Mutation: {
         addBook: (_, { title, author }) => {
             const book = { title, author };
-            books.push(book);
             pubsub.publish(BOOK_ADDED, { bookAdded: book });
             return book;
         },
@@ -62,26 +54,30 @@ const resolvers = {
             gameRooms.push(gameRoom);
             return gameRoom;
         },
-        joinGameRoom: (_, { player, gameRoomId }) => {
+        joinGameRoom: (_, { playerId, gameRoomId }) => {
             const gameRoom = gameRooms.filter(room => room.id === gameRoomId)[0];
-            gameRoom.players.push(player);
-            pubsub.publish(PLAYER_JOINED, { playerJoined: player });
+            const player = players.filter(user => user.id === playerId)[0];
+            const playerIsInGameRoom = gameRoom.players.some(user => user.id === playerId);
+            if (player && !playerIsInGameRoom) {
+                gameRoom.players.push(player);
+                pubsub.publish(PLAYER_JOINED, { playerJoined: player });
+            }
             return gameRoom;
         },
-        leaveGameRoom: (_, { player, gameRoomId }) => {
+        leaveGameRoom: (_, { playerId, gameRoomId }) => {
             const gameRoom = gameRooms.filter(room => room.id === gameRoomId)[0];
-            gameRoom.players = gameRoom.players.filter(user => user.id !== player.id);
+            const player = players.filter(user => user.id === playerId)[0];
+            gameRoom.players = gameRoom.players.filter(user => user.id !== playerId);
             pubsub.publish(PLAYER_LEFT, { playerLeft: player });
             return gameRoom;
         }
     },
 
     Subscription: {
-        bookAdded: {
-            subscribe: () => pubsub.asyncIterator([BOOK_ADDED])
-        },
         playerJoined: {
             subscribe: (_, { gameRoomId }) => {
+                // TODO - Only care about gameRoom with gameRoomId
+                // function currently cares about EVERY instance of player joining
                 console.log('gameRoom', gameRoomId);
                 return pubsub.asyncIterator([PLAYER_JOINED]);
             }
