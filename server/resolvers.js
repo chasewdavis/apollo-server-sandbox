@@ -5,6 +5,7 @@ const faker = require('faker');
 
 const BOOK_ADDED = 'BOOK_ADDED';
 const PLAYER_JOINED = 'PLAYER_JOINED';
+const PLAYER_LEFT = 'PLAYER_LEFT';
 
 const books = [
     {
@@ -65,6 +66,12 @@ const resolvers = {
             gameRoom.players.push(player);
             pubsub.publish(PLAYER_JOINED, { playerJoined: player });
             return gameRoom;
+        },
+        leaveGameRoom: (_, { player, gameRoomId }) => {
+            const gameRoom = gameRooms.filter(room => room.id === gameRoomId)[0];
+            gameRoom.players = gameRoom.players.filter(user => user.id !== player.id);
+            pubsub.publish(PLAYER_LEFT, { playerLeft: player });
+            return gameRoom;
         }
     },
 
@@ -76,6 +83,12 @@ const resolvers = {
             subscribe: (_, { gameRoomId }) => {
                 console.log('gameRoom', gameRoomId);
                 return pubsub.asyncIterator([PLAYER_JOINED]);
+            }
+        },
+        playerLeft: {
+            subscribe: (_, { gameRoomId }) => {
+                console.log('player left, game room', gameRoomId);
+                return pubsub.asyncIterator([PLAYER_LEFT]);
             }
         }
     }

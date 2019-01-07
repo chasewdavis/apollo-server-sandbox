@@ -34,10 +34,12 @@ type Mutation {
     addBook(title: String!, author: String!): Book 
     createPlayer(userName: String!): Player
     joinGameRoom(gameRoomId: String!, player: PlayerInput!): GameRoom
+    leaveGameRoom(gameRoomId: ID!, player: PlayerInput!): GameRoom
     createGameRoom(gameRoomName: String!, player: PlayerInput!): GameRoom
 }
 
 type Subscription {
     bookAdded: Book
     playerJoined(gameRoomId: ID!): Player
+    playerLeft(gameRoomId: ID!): Player
 }
