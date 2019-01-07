@@ -62,7 +62,6 @@ const resolvers = {
         },
         joinGameRoom: (_, { player, gameRoomId }) => {
             const gameRoom = gameRooms.filter(room => room.id === gameRoomId)[0];
-            console.log('gameroom to join', gameRoom);
             gameRoom.players.push(player);
             pubsub.publish(PLAYER_JOINED, { playerJoined: player });
             return gameRoom;
@@ -72,8 +71,13 @@ const resolvers = {
     Subscription: {
         bookAdded: {
             subscribe: () => pubsub.asyncIterator([BOOK_ADDED])
+        },
+        playerJoined: {
+            subscribe: (_, { gameRoomId }) => {
+                console.log('gameRoom', gameRoomId);
+                return pubsub.asyncIterator([PLAYER_JOINED]);
+            }
         }
-        // TODO - player joined
     }
 };
 

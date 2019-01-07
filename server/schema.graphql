@@ -39,5 +39,5 @@ type Mutation {
 
 type Subscription {
     bookAdded: Book
-    playerJoined: Player
+    playerJoined(gameRoomId: ID!): Player
 }
