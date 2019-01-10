@@ -1,11 +1,14 @@
 const { PubSub, withFilter, UserInputError } = require('apollo-server');
 
+// TODO - What if multiple instances of server need to be created
+// How will this effect pubsub?
 const pubsub = new PubSub();
 const faker = require('faker');
 
 const PLAYER_JOINED = 'PLAYER_JOINED';
 const PLAYER_LEFT = 'PLAYER_LEFT';
 
+// TODO - DynamoDB
 const gameRooms = [
     {
         name: 'game room one',
@@ -14,7 +17,7 @@ const gameRooms = [
     }
 ];
 
-
+// TODO - DynamoDB
 const players = [
     {
         id: '770de62d-1f9b-4e1c-be4e-ba5e566e5837',
