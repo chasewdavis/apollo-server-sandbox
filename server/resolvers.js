@@ -48,6 +48,7 @@ const resolvers = {
             gameRooms.push(gameRoom);
             return gameRoom;
         },
+        // TODO - Dry up joinGameRoom & leaveGameRoom - create validation function / error throwing function
         joinGameRoom: (_, { playerId, gameRoomId }) => {
             const gameRoom = gameRooms.filter(room => room.id === gameRoomId)[0];
             if (!gameRoom) {
