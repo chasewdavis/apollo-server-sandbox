@@ -1,4 +1,4 @@
-const { PubSub } = require('apollo-server');
+const { PubSub, withFilter } = require('apollo-server');
 
 const pubsub = new PubSub();
 const faker = require('faker');
@@ -54,7 +54,7 @@ const resolvers = {
             const playerIsInGameRoom = gameRoom.players.some(user => user.id === playerId);
             if (player && !playerIsInGameRoom) {
                 gameRoom.players.push(player);
-                pubsub.publish(PLAYER_JOINED, { playerJoined: player });
+                pubsub.publish(PLAYER_JOINED, { playerJoined: player, gameRoomId });
             }
             return gameRoom;
         },
@@ -62,25 +62,23 @@ const resolvers = {
             const gameRoom = gameRooms.filter(room => room.id === gameRoomId)[0];
             const player = players.filter(user => user.id === playerId)[0];
             gameRoom.players = gameRoom.players.filter(user => user.id !== playerId);
-            pubsub.publish(PLAYER_LEFT, { playerLeft: player });
+            pubsub.publish(PLAYER_LEFT, { playerLeft: player, gameRoomId });
             return gameRoom;
         }
     },
 
     Subscription: {
         playerJoined: {
-            subscribe: (_, { gameRoomId }) => {
-                // TODO - Only care about gameRoom with gameRoomId
-                // function currently cares about EVERY instance of player joining
-                console.log('gameRoom', gameRoomId);
-                return pubsub.asyncIterator([PLAYER_JOINED]);
-            }
+            subscribe: withFilter(
+                () => pubsub.asyncIterator([PLAYER_JOINED]),
+                (payload, variables) => payload.gameRoomId === variables.gameRoomId
+            )
         },
         playerLeft: {
-            subscribe: (_, { gameRoomId }) => {
-                console.log('player left, game room', gameRoomId);
-                return pubsub.asyncIterator([PLAYER_LEFT]);
-            }
+            subscribe: withFilter(
+                () => pubsub.asyncIterator([PLAYER_LEFT]),
+                (payload, variables) => payload.gameRoomId === variables.gameRoomId
+            )
         }
     }
 };
