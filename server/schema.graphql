@@ -1,8 +1,3 @@
-type Book {
-    title: String
-    author: String
-}
-
 input PlayerInput {
     userName: String!
     id: ID
@@ -25,13 +20,11 @@ type GameRoom {
 }
 
 type Query {
-    books (limit:Int): [Book]
     gameRooms: [GameRoom]
     players: [Player]
 }
 
 type Mutation {
-    addBook(title: String!, author: String!): Book 
     createPlayer(userName: String!): Player
     joinGameRoom(gameRoomId: String!, playerId: ID!): GameRoom
     leaveGameRoom(gameRoomId: ID!, playerId: ID!): GameRoom
@@ -39,7 +32,6 @@ type Mutation {
 }
 
 type Subscription {
-    bookAdded: Book
     playerJoined(gameRoomId: ID!): Player
     playerLeft(gameRoomId: ID!): Player
 }

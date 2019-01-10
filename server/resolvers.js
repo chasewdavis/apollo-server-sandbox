@@ -3,7 +3,6 @@ const { PubSub } = require('apollo-server');
 const pubsub = new PubSub();
 const faker = require('faker');
 
-const BOOK_ADDED = 'BOOK_ADDED';
 const PLAYER_JOINED = 'PLAYER_JOINED';
 const PLAYER_LEFT = 'PLAYER_LEFT';
 
@@ -30,11 +29,6 @@ const resolvers = {
     },
 
     Mutation: {
-        addBook: (_, { title, author }) => {
-            const book = { title, author };
-            pubsub.publish(BOOK_ADDED, { bookAdded: book });
-            return book;
-        },
         createPlayer: (_, { userName }) => {
             const player = {
                 userName,
