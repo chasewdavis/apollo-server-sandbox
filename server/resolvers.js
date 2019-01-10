@@ -1,4 +1,4 @@
-const { PubSub, withFilter } = require('apollo-server');
+const { PubSub, withFilter, UserInputError } = require('apollo-server');
 
 const pubsub = new PubSub();
 const faker = require('faker');
@@ -50,7 +50,17 @@ const resolvers = {
         },
         joinGameRoom: (_, { playerId, gameRoomId }) => {
             const gameRoom = gameRooms.filter(room => room.id === gameRoomId)[0];
+            if (!gameRoom) {
+                throw new UserInputError('Game room does not exist', {
+                    invalidGameRoomId: gameRoomId
+                });
+            }
             const player = players.filter(user => user.id === playerId)[0];
+            if (!player) {
+                throw new UserInputError('Player does not exist', {
+                    invalidPlayerId: playerId
+                });
+            }
             const playerIsInGameRoom = gameRoom.players.some(user => user.id === playerId);
             if (player && !playerIsInGameRoom) {
                 gameRoom.players.push(player);
