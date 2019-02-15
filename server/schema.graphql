@@ -1,11 +1,11 @@
 input PlayerInput {
-    userName: String!
-    id: ID
+    playerName: String!
+    playerId: ID
 }
 
 type Player {
-    id: ID!
-    userName: String!
+    playerId: ID!
+    playerName: String!
 }
 
 input GameRoomInput {
@@ -25,7 +25,9 @@ type Query {
 }
 
 type Mutation {
-    createPlayer(userName: String!): Player
+    getPlayer(playerId: ID!): Player
+    createPlayer(playerName: String!): Player
+    deletePlayer(playerId: ID!): [Player]
     joinGameRoom(gameRoomId: String!, playerId: ID!): GameRoom
     leaveGameRoom(gameRoomId: ID!, playerId: ID!): GameRoom
     createGameRoom(gameRoomName: String!, player: PlayerInput!): GameRoom

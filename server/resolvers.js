@@ -4,6 +4,7 @@ const { PubSub, withFilter, UserInputError } = require('apollo-server');
 // How will this effect pubsub?
 const pubsub = new PubSub();
 const faker = require('faker');
+const playersTable = require('./model/players');
 
 const PLAYER_JOINED = 'PLAYER_JOINED';
 const PLAYER_LEFT = 'PLAYER_LEFT';
@@ -18,7 +19,7 @@ const gameRooms = [
 ];
 
 // TODO - DynamoDB
-const players = [
+let players = [
     {
         id: '770de62d-1f9b-4e1c-be4e-ba5e566e5837',
         userName: 'chase'
@@ -32,13 +33,17 @@ const resolvers = {
     },
 
     Mutation: {
-        createPlayer: (_, { userName }) => {
-            const player = {
-                userName,
-                id: faker.random.uuid()
-            };
-            players.push(player);
+        getPlayer: async (_, { playerId }) => {
+            const player = await playersTable.getPlayer(playerId);
             return player;
+        },
+        createPlayer: async (_, { playerName }) => {
+            const player = await playersTable.createPlayer(playerName);
+            return player;
+        },
+        deletePlayer: async (_, { playerId }) => {
+            players = await playersTable.deletePlayer(playerId);
+            return players;
         },
         createGameRoom: (_, { gameRoomName, player }) => {
             const gameRoom = {
@@ -68,6 +73,7 @@ const resolvers = {
             const playerIsInGameRoom = gameRoom.players.some(user => user.id === playerId);
             if (player && !playerIsInGameRoom) {
                 gameRoom.players.push(player);
+
                 pubsub.publish(PLAYER_JOINED, { playerJoined: player, gameRoomId });
             }
             return gameRoom;
