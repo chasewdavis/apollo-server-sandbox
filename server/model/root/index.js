@@ -1,8 +1,11 @@
 const { AWS } = require('./config');
+const moment = require('moment');
+const { PubSub } = require('apollo-server');
 
 class Model {
     constructor() {
         this.documentClient = new AWS.DynamoDB.DocumentClient();
+        this.pubsub = new PubSub();
     }
 
     generateUniqueId() {
@@ -17,6 +20,10 @@ class Model {
         }
 
         return uniqueID;
+    }
+
+    generateTimestamp() {
+        return moment().toISOString();
     }
 }
 

@@ -5,32 +5,35 @@ input PlayerInput {
 
 type Player {
     playerId: ID!
-    playerName: String!
-}
-
-input GameRoomInput {
-    name: String!
-    players: [PlayerInput]
+    playerName: String
+    status: String
 }
 
 type GameRoom {
-    id: ID!
-    name: String!
-    players: [Player]
+    gameRoomId: ID!
+    createdAt: String!
+    createdBy: String!
+    gameRoomName: String!
+}
+
+type Status {
+    playerStatus: String!
+    playerId: String!
+    gameRoomId: String!
+    lastAccessAt: String
 }
 
 type Query {
-    gameRooms: [GameRoom]
-    players: [Player]
+    player(playerId: ID!): Player
+    gameRoom(gameRoomId: ID!): GameRoom
+    gameRoomMembers(gameRoomId: ID!): [Player]
 }
 
 type Mutation {
-    getPlayer(playerId: ID!): Player
     createPlayer(playerName: String!): Player
     deletePlayer(playerId: ID!): [Player]
-    joinGameRoom(gameRoomId: String!, playerId: ID!): GameRoom
-    leaveGameRoom(gameRoomId: ID!, playerId: ID!): GameRoom
-    createGameRoom(gameRoomName: String!, player: PlayerInput!): GameRoom
+    gameRoomStatusUpdate(playerId: String!, gameRoomId: String!, playerStatus: String): Status
+    createGameRoom(gameRoomName: String!, playerId: ID!): GameRoom
 }
 
 type Subscription {

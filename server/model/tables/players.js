@@ -1,4 +1,4 @@
-const Model = require('./model');
+const Model = require('../root');
 
 class Players extends Model {
     constructor() {
@@ -9,12 +9,12 @@ class Players extends Model {
     }
 
     async getPlayer(playerId) {
-        const options = {
+        const params = {
             TableName: this.tableName, 
             Key: { playerId }
         };
 
-        const player = await this.documentClient.get(options).promise();
+        const player = await this.documentClient.get(params).promise();
 
         return player.Item;
     }
@@ -22,34 +22,35 @@ class Players extends Model {
     async createPlayer(playerName) {
         const Item = {
             playerId: this.generateUniqueId(),
+            createdAt: this.generateTimestamp(),
             playerName
         };
 
-        const options = {
+        const params = {
             TableName: this.tableName,
             Item
         };
 
-        await this.documentClient.put(options).promise();
+        await this.documentClient.put(params).promise();
 
         return Item;
     }
 
     async deletePlayer(playerId) {
-        const deleteOptions = {
+        const deleteparams = {
             TableName: this.tableName, 
             Key: { playerId }
         };
 
-        await this.documentClient.delete(deleteOptions).promise();
+        await this.documentClient.delete(deleteparams).promise();
 
-        const getOptions = {
+        const getparams = {
             TableName: this.tableName,
             ReturnConsumedCapacity: 'TOTAL'
         };
 
         // for science, don't do a full collection scan in the real world
-        const players = await this.documentClient.scan(getOptions).promise();
+        const players = await this.documentClient.scan(getparams).promise();
 
         console.log('Consumed Capacity:', players.ConsumedCapacity);
 
