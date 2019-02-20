@@ -6,7 +6,7 @@ input PlayerInput {
 type Player {
     playerId: ID!
     playerName: String
-    status: String
+    playerStatus: String
 }
 
 type GameRoom {
@@ -26,7 +26,7 @@ type Status {
 type Query {
     player(playerId: ID!): Player
     gameRoom(gameRoomId: ID!): GameRoom
-    gameRoomMembers(gameRoomId: ID!): [Player]
+    gameRoomMembers(gameRoomId: ID!, playerStatus: String): [Player]
 }
 
 type Mutation {

@@ -11,8 +11,8 @@ const Query = {
         const gameRoom = await gameRoomsTable.getGameRoom(gameRoomId);
         return gameRoom;
     },
-    gameRoomMembers: async (_, { gameRoomId }) => {
-        const players = await gameRoomMembers.gameRoomMembers(gameRoomId);
+    gameRoomMembers: async (_, { gameRoomId, playerStatus }) => {
+        const players = await gameRoomMembers.gameRoomMembers({ gameRoomId, playerStatus });
         return players;
     }
 };
