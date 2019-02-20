@@ -11,9 +11,7 @@ class GameRoomMembers extends Model {
     }
 
     async gameRoomStatusUpdate({ playerId, gameRoomId, playerStatus = 'ACTIVE' }) {
-        const timestamp = this.generateTimestamp();
-
-        const params = {   
+        const params = {
             TableName: this.tableName,
             Key: { 
                 gameRoomId,
@@ -29,24 +27,35 @@ class GameRoomMembers extends Model {
             },
             ExpressionAttributeValues: {
                 ':playerStatus': playerStatus,
-                ':lastAccessAt': timestamp
+                ':lastAccessAt': this.generateTimestamp()
             },
             ReturnValues: 'ALL_NEW'
         };
 
         const result = await this.documentClient.update(params).promise();
+
         const pubsubKey = playerStatus === 'ACTIVE' ? PLAYER_JOINED : PLAYER_LEFT;
         await this.pubsub.publish(pubsubKey, { playerJoined: { playerId }, gameRoomId });
+
         return result.Attributes;
     }
 
-    async gameRoomMembers(gameRoomId) {
+    async gameRoomMembers({ gameRoomId, playerStatus }) {
         const params = {
             TableName: this.tableName,
-            IndexName: 'gameRoomId-playerId-index',
-            KeyConditionExpression: 'gameRoomId = :game_room_id',
-            ExpressionAttributeValues: { ':game_room_id': gameRoomId }
+            IndexName: 'gameRoomId-playerStatus-index',
+            KeyConditionExpression: `
+                gameRoomId = :game_room_id
+            `,
+            ExpressionAttributeValues: { 
+                ':game_room_id': gameRoomId
+            }
         };
+
+        if (playerStatus) {
+            params.KeyConditionExpression += 'AND playerStatus = :player_status';
+            params.ExpressionAttributeValues[':player_status'] = playerStatus;
+        }
 
         const result = await this.documentClient.query(params).promise();
 
