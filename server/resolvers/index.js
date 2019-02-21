@@ -11,7 +11,7 @@ const resolvers = {
     Subscription,
 
     Player,
-    GameRoom,
+    GameRoom
 };
 
 module.exports = resolvers;

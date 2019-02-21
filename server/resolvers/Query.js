@@ -1,4 +1,3 @@
-const playersTable = require('../model/tables/players');
 const gameRoomsTable = require('../model/tables/gameRooms');
 const gameRoomMembers = require('../model/tables/gameRoomMembers');
 
@@ -8,7 +7,6 @@ const Query = {
         const gameRoom = await gameRoomsTable.getGameRoom(gameRoomId);
         return gameRoom;
     },
-    // n + 1 issue when fetching each players name
     gameRoomMembers: async (_, { gameRoomId, playerStatus }, context) => {
         const players = await gameRoomMembers.gameRoomMembers({ gameRoomId, playerStatus });
         return players;

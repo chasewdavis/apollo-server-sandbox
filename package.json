@@ -8,11 +8,12 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
-    "author": "Meteor Development Group",
+    "author": "Chase Davis",
     "license": "MIT",
     "dependencies": {
         "apollo-server": "^2.0.5",
         "aws-sdk": "^2.403.0",
+        "dataloader": "^1.4.0",
         "dotenv": "^6.2.0",
         "graphql": "^0.13.2",
         "graphql-import": "^0.7.1",

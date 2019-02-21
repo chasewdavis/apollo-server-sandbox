@@ -8,17 +8,6 @@ class Players extends Model {
         this.partitionKey = 'playerId';
     }
 
-    async getPlayer(playerId) {
-        const params = {
-            TableName: this.tableName, 
-            Key: { playerId }
-        };
-
-        const player = await this.documentClient.get(params).promise();
-
-        return player.Item;
-    }
-
     async getPlayers(playerIds) {
         const Keys = playerIds.map(playerId => ({ 
             playerId
@@ -40,9 +29,13 @@ class Players extends Model {
             }
         };
         
-        const players = await this.documentClient.batchGet(params).promise();
+        const result = await this.documentClient.batchGet(params).promise();
 
-        return players.Responses[this.tableName];
+        const players = result.Responses[this.tableName];
+        
+        const mappedPlayers = playerIds.map(id => players.find(player => player.playerId === id));
+
+        return mappedPlayers;
     }
 
     async createPlayer(playerName) {
