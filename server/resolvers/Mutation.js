@@ -19,6 +19,7 @@ const Mutation = {
     },
     gameRoomStatusUpdate: async (_, { playerId, gameRoomId, playerStatus }) => {
         const status = await gameRoomMembers.gameRoomStatusUpdate({ playerId, gameRoomId, playerStatus });
+        // query for player id ONLY if it was requested
         return status;
     }
 };

@@ -19,6 +19,32 @@ class Players extends Model {
         return player.Item;
     }
 
+    async getPlayers(playerIds) {
+        const Keys = playerIds.map(playerId => ({ 
+            playerId
+        }));
+
+        const params = {
+            RequestItems: {
+                [this.tableName]: {
+                    Keys,
+                    ExpressionAttributeNames: {
+                        '#playerId': 'playerId',
+                        '#playerName': 'playerName'
+                    },
+                    ProjectionExpression: `
+                        #playerId,
+                        #playerName
+                    `
+                }
+            }
+        };
+        
+        const players = await this.documentClient.batchGet(params).promise();
+
+        return players.Responses[this.tableName];
+    }
+
     async createPlayer(playerName) {
         const Item = {
             playerId: this.generateUniqueId(),
