@@ -5,15 +5,16 @@ input PlayerInput {
 
 type Player {
     playerId: ID!
-    playerName: String
     playerStatus: String
+    playerName: String
 }
 
 type GameRoom {
     gameRoomId: ID!
     createdAt: String!
     createdBy: String!
-    gameRoomName: String!
+    gameRoomName: String
+    players:[Player]
 }
 
 type Status {
@@ -21,6 +22,7 @@ type Status {
     playerId: String!
     gameRoomId: String!
     lastAccessAt: String
+    playerName: String
 }
 
 type Query {
