@@ -1,6 +1,6 @@
-input PlayerInput {
-    playerName: String!
-    playerId: ID
+enum StatusOptions {
+    ACTIVE
+    INACTIVE
 }
 
 type Player {
@@ -34,7 +34,7 @@ type Query {
 type Mutation {
     createPlayer(playerName: String!): Player
     deletePlayer(playerId: ID!): [Player]
-    gameRoomStatusUpdate(playerId: String!, gameRoomId: String!, playerStatus: String): Status
+    gameRoomStatusUpdate(playerId: String!, gameRoomId: String!, playerStatus: StatusOptions): Status
     createGameRoom(gameRoomName: String!, playerId: ID!): GameRoom
 }
 
