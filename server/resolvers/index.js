@@ -3,6 +3,7 @@ const Mutation = require('./Mutation');
 const Subscription = require('./Subscription');
 
 const Player = require('./resolvers/Player');
+const Status = require('./resolvers/Status');
 const GameRoom = require('./resolvers/GameRoom');
 
 const resolvers = {
@@ -11,6 +12,7 @@ const resolvers = {
     Subscription,
 
     Player,
+    Status,
     GameRoom
 };
 

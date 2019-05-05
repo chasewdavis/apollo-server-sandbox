@@ -43,17 +43,23 @@ class GameRoomMembers extends Model {
     async gameRoomMembers({ gameRoomId, playerStatus }) {
         const params = {
             TableName: this.tableName,
-            IndexName: 'gameRoomId-playerStatus-index',
             KeyConditionExpression: `
-                gameRoomId = :game_room_id
+                #foobar = :game_room_id
             `,
+            ExpressionAttributeNames: {
+                '#foobar': 'gameRoomId'
+            },
             ExpressionAttributeValues: { 
                 ':game_room_id': gameRoomId
-            }
+            },
+            ReturnConsumedCapacity: 'TOTAL'
         };
 
         if (playerStatus) {
-            params.KeyConditionExpression += 'AND playerStatus = :player_status';
+            params.KeyConditionExpression += ` 
+                AND playerStatus = :player_status
+            `;
+            params.IndexName = 'gameRoomId-playerStatus-index';
             params.ExpressionAttributeValues[':player_status'] = playerStatus;
         }
 
