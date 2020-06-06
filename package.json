@@ -11,7 +11,7 @@
     "author": "Chase Davis",
     "license": "MIT",
     "dependencies": {
-        "apollo-server": "^2.0.5",
+        "apollo-server": "^2.14.2",
         "aws-sdk": "^2.403.0",
         "dataloader": "^1.4.0",
         "dotenv": "^6.2.0",
